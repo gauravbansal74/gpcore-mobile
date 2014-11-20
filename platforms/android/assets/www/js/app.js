@@ -24,7 +24,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   "port": "80",
   "session_id":"0",
   "login_url" : "login.php",
-  "get_menu_url" : "getmenu.php"
+  "get_menu_url" : "getmenu.php",
+  "get_list_url" : "getlist.php?m="
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -53,12 +54,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     }
   })
-  .state('app.playlists', {
-    url: "/playlists",
+  .state('app.getlists', {
+    url: "/getlists/:moduleId",
     views: {
       'menuContent' :{
-        templateUrl: "templates/playlists.html",
-        controller: 'PlaylistsCtrl'
+        templateUrl: "templates/getlists.html",
+        controller: 'GetlistsCtrl'
       }
     }
   })
@@ -75,12 +76,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   })
   
 
-  .state('app.single', {
-    url: "/playlists/:playlistId",
+  .state('app.getdetail', {
+    url: "/getdetail/:getdetailId",
     views: {
       'menuContent' :{
-        templateUrl: "templates/playlist.html",
-        controller: 'PlaylistCtrl'
+        templateUrl: "templates/getdetail.html",
+        controller: 'GetDetailCtrl'
       }
     }
   });
@@ -94,7 +95,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     showLoader : showLoader,
     hideLoader : hideLoader,
     showModalPopup : showModalPopup,
-    getMenu : getMenu
+    getMenu : getMenu,
+    getList : getList
   });
 
   function showLoader(){
@@ -118,7 +120,24 @@ angular.module('starter', ['ionic', 'starter.controllers'])
          console.log('Thank you for not eating my delicious ice cream cone');
        });
       
-  };
+  }
+
+
+  function getList(moduleId){
+      var request = $http({
+        method : "POST",
+        url : appConfig.url+''+appConfig.get_list_url+''+moduleId,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        data :{
+          session_id : appConfig.session_id
+        },
+        transformRequest: serializeData
+      });
+      return(request.then(handleSuccess, handleError));
+  }
+
+
+
   function getMenu(){
       var request = $http({
         method : "POST",
@@ -132,7 +151,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       return(request.then(handleSuccess, handleError));
   }
 
-  
+
   function loginUser(username, password){
     var request = $http({
       method : "POST",

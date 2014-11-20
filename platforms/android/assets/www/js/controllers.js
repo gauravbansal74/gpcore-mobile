@@ -6,8 +6,8 @@ angular.module('starter.controllers', [])
         angular.forEach(successmessage, function(value, key) {
           console.log(value);
             if(angular.equals(value.title, "mobile")){
-              console.log("in if ");
-              $scope.playlists = value.modules;
+              console.log("in if ", value.modules);
+              $scope.menulists = value.modules;
             };
         });
 
@@ -27,30 +27,34 @@ angular.module('starter.controllers', [])
       sugarService.loginUser(username, password)
         .then(function(successmessage){
           appConfig.session_id = successmessage.session_id;
-          $state.transitionTo('app.playlists', {}, {reload: true, inherit: true, notify: true });
+          $state.transitionTo('app.getlists', {}, {reload: true, inherit: false, notify: true });
            sugarService.hideLoader();
            console.log("Session id using appconfig",appConfig.session_id);
         }, function(errormessage){
            sugarService.hideLoader();
            sugarService.showModalPopup(errormessage.name, errormessage.description);
-        })
-    
+        });
     };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('GetlistsCtrl', function($scope, $stateParams, appConfig, sugarService) {
+   sugarService.showLoader();
+   sugarService.getList($stateParams.moduleId)
+    .then(function(successmessage){
+      console.log("success List",successmessage.values);
+      $scope.getlists = successmessage.values;
+      sugarService.hideLoader();
+    },function(errormessage){
+        console.log("Error List", errormessage);
+        sugarService.hideLoader();
+    });
+  console.log("Parameters",$stateParams);
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams, appConfig) {
+.controller('GetDetailCtrl', function($scope, $stateParams, appConfig) {
+  sugarService.showLoader();
   $scope.myconstatn = appConfig.port;
   appConfig.port = "90";
   $scope.myconstatn = appConfig.port;
+  sugarService.hideLoader();
 });

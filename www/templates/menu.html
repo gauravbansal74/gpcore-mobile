@@ -13,7 +13,7 @@
     </header>
     <ion-content class="has-header">
       <ion-list>
-        <ion-item nav-clear menu-close ng-repeat="menu in menulists" href="#/app/playlists/1">
+        <ion-item nav-clear menu-close ng-repeat="menu in menulists" href="#/app/getlists/{{menu.title}}">
           {{menu.title}}
         </ion-item>
       </ion-list>

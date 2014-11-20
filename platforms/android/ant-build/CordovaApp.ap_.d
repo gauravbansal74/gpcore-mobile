@@ -48,12 +48,11 @@
 /var/www/html/gpcore-mobile/platforms/android/assets/www/img/ionic.png \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/js/app.js \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/js/controllers.js \
-/var/www/html/gpcore-mobile/platforms/android/assets/www/templates/playlists.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/search.html \
-/var/www/html/gpcore-mobile/platforms/android/assets/www/templates/playlist.html \
+/var/www/html/gpcore-mobile/platforms/android/assets/www/templates/getlists.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/browse.html \
+/var/www/html/gpcore-mobile/platforms/android/assets/www/templates/getdetail.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/login.html \
-/var/www/html/gpcore-mobile/platforms/android/assets/www/templates/login1.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/menu.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/lib/ionic \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/lib/ionic/fonts \
