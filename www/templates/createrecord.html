@@ -60,6 +60,27 @@
 					   				</span>
 					   			</span>
 
+					   			<!-- For Type enum -->
+					   			<span ng-switch-when="enum" class="item-select">
+					   				<span ng-if="row.required == 1">
+					   					<select name="{{row.name}}">
+					   						<option ng-repeat="option in row.options" ng-if="row.default_value == option.value" value="{{option.value}}" ng-selected="selected">
+					   							{{option.name}}
+					   						</option>
+					   						<option ng-repeat="option in row.options" ng-if="row.default_value != option.value" value="{{option.value}}">
+					   							{{option.name}}
+         					   				</option>
+					   					</select>
+					   				</span>
+					   				<span ng-if="row.required != 1">
+					   					<select name="{{row.name}}">
+					   						<option ng-repeat="option in row.options" value="{{option.value}}">
+					   							{{option.name}}
+					   						</option>
+					   					</select>
+					   				</span>
+					   			</span>
+
 					   			<span ng-switch-default>
 					   				{{row.type}}
 					   			</span>
