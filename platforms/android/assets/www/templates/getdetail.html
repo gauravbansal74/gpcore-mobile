@@ -1,6 +1,18 @@
-<ion-view title="Playlist">
+<ion-view title="Details">
   <ion-content class="has-header">
-    <h1>Playlist</h1>
-    <input type="text" ng-model="myconstatn" />
+  	<div class="list" ng-repeat="dataDetail in dataDetails">
+		  <div class="item item-divider">
+		  		{{dataDetail.panel_name}}
+		  </div>
+		  <div ng-repeat="rows in dataDetail.rows">
+		  	 <div class="item" ng-repeat="row in rows">
+			      <p>{{row.label}}</p>
+				    <span>
+			   		{{row.value}}
+			   		</span>
+			 	</span>
+		  	 </div>
+		  </div>
+	</div>
   </ion-content>
 </ion-view>

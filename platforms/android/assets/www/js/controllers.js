@@ -39,6 +39,7 @@ angular.module('starter.controllers', [])
 
 .controller('GetlistsCtrl', function($scope, $stateParams, appConfig, sugarService) {
    sugarService.showLoader();
+   $scope.moduleName = $stateParams.moduleId;
    sugarService.getList($stateParams.moduleId)
     .then(function(successmessage){
       console.log("success List",successmessage.values);
@@ -51,10 +52,16 @@ angular.module('starter.controllers', [])
   console.log("Parameters",$stateParams);
 })
 
-.controller('GetDetailCtrl', function($scope, $stateParams, appConfig) {
+.controller('GetDetailCtrl', function($scope, $stateParams, appConfig, sugarService) {
   sugarService.showLoader();
-  $scope.myconstatn = appConfig.port;
-  appConfig.port = "90";
-  $scope.myconstatn = appConfig.port;
-  sugarService.hideLoader();
+  console.log($stateParams);
+  sugarService.getDetail($stateParams.moduleId, $stateParams.getdetailId)
+    .then(function(successmessage){
+      $scope.dataDetails = successmessage;
+      sugarService.hideLoader();
+    },function(errormessage){
+        console.log(errormessage);
+        sugarService.hideLoader();
+    });
+  
 });

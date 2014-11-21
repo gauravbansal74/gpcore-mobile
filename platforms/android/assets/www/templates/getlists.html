@@ -1,10 +1,10 @@
-<ion-view title="Playlists">
+<ion-view title="List of records">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content class="has-header">
     <ion-list>
-      <ion-item class="item item-icon-right" ng-repeat="getlist in getlists" href="#/app/getdetail/{{getlist.id}}">
+      <ion-item class="item item-icon-right" ng-repeat="getlist in getlists" href="#/app/getdetail/{{moduleName}}/{{getlist.id}}">
         <i class="icon ion-arrow-right-c"></i>
         {{getlist.name}}
       </ion-item>

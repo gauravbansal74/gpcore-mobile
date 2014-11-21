@@ -25,7 +25,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   "session_id":"0",
   "login_url" : "login.php",
   "get_menu_url" : "getmenu.php",
-  "get_list_url" : "getlist.php?m="
+  "get_list_url" : "getlist.php?m=",
+  "get_detail_url" :"getdetails.php?m="
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -77,7 +78,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   
 
   .state('app.getdetail', {
-    url: "/getdetail/:getdetailId",
+    url: "/getdetail/:moduleId/:getdetailId",
     views: {
       'menuContent' :{
         templateUrl: "templates/getdetail.html",
@@ -96,7 +97,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     hideLoader : hideLoader,
     showModalPopup : showModalPopup,
     getMenu : getMenu,
-    getList : getList
+    getList : getList,
+    getDetail : getDetail
   });
 
   function showLoader(){
@@ -122,6 +124,20 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       
   }
 
+
+   function getDetail(moduleId, recordId){
+      var request = $http({
+        method : "POST",
+        url : appConfig.url+''+appConfig.get_detail_url+''+moduleId,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        data :{
+          session_id : appConfig.session_id,
+          id : recordId
+        },
+        transformRequest: serializeData
+      });
+      return(request.then(handleSuccess, handleError));
+  }
 
   function getList(moduleId){
       var request = $http({
