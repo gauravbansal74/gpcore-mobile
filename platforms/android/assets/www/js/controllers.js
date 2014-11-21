@@ -52,10 +52,12 @@ angular.module('starter.controllers', [])
   console.log("Parameters",$stateParams);
 })
 
-.controller('GetDetailCtrl', function($scope, $stateParams, appConfig, sugarService) {
+.controller('GetDetailCtrl', function($scope, $state, $stateParams, appConfig, sugarService) {
   sugarService.showLoader();
   console.log($stateParams);
-  sugarService.getDetail($stateParams.moduleId, $stateParams.getdetailId)
+  $scope.moduleId = $stateParams.moduleId;
+  $scope.recordId = $stateParams.recordId;
+  sugarService.getDetail($stateParams.moduleId, $stateParams.recordId)
     .then(function(successmessage){
       $scope.dataDetails = successmessage;
       sugarService.hideLoader();
@@ -63,5 +65,51 @@ angular.module('starter.controllers', [])
         console.log(errormessage);
         sugarService.hideLoader();
     });
+
+    $scope.deleterecord = function(moduleId, recordId){
+      sugarService.showModalPopupConfirm("Delete","Do you reallly want to delete??")
+        .then(function(data){
+            if(data){
+              sugarService.showLoader();
+              sugarService.deleteRecord(moduleId, recordId)
+                .then(function(successmessage){
+                   $state.transitionTo('app.getlists',$stateParams, {reload: true, inherit: false, notify: true });
+                  console.log(successmessage);
+                }, function(errormessage){  
+                  console.log(errormessage);
+                });
+              sugarService.hideLoader();
+            }
+        });
+    };
   
+})
+
+
+.controller('DetailTabsCtrl', function($scope, $stateParams, appConfig, sugarService){
+  sugarService.showLoader();
+  console.log($stateParams);
+  $scope.moduleId = $stateParams.moduleId;
+  $scope.recordId = $stateParams.recordId;
+  $scope.deleterecord = function(){
+    sugarService.showModalPopup("Delete","Do you reallly want to delete??");
+  };
+  sugarService.hideLoader();
+})
+
+.controller('DeleteRecordCrtl', function($scope, $stateParams, appConfig, sugarService){
+ 
+})
+
+.controller('CreateRecordCrtl', function($scope, $stateParams, appConfig, sugarService){
+    sugarService.showLoader();
+    sugarService.getForm($stateParams.moduleId)
+      .then(function(successmessage){
+        console.log(successmessage);
+        $scope.dataDetails = successmessage;
+        sugarService.hideLoader();
+      }, function(errormessage){
+        console.log(errormessage);
+        sugarService.hideLoader();
+      });
 });

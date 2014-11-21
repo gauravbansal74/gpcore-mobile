@@ -51,8 +51,10 @@
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/search.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/getlists.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/browse.html \
+/var/www/html/gpcore-mobile/platforms/android/assets/www/templates/detailtabs.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/getdetail.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/login.html \
+/var/www/html/gpcore-mobile/platforms/android/assets/www/templates/createrecord.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/templates/menu.html \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/lib/ionic \
 /var/www/html/gpcore-mobile/platforms/android/assets/www/lib/ionic/fonts \

@@ -99,4 +99,17 @@ angular.module('starter.controllers', [])
 
 .controller('DeleteRecordCrtl', function($scope, $stateParams, appConfig, sugarService){
  
+})
+
+.controller('CreateRecordCrtl', function($scope, $stateParams, appConfig, sugarService){
+    sugarService.showLoader();
+    sugarService.getForm($stateParams.moduleId)
+      .then(function(successmessage){
+        console.log(successmessage);
+        $scope.dataDetails = successmessage;
+        sugarService.hideLoader();
+      }, function(errormessage){
+        console.log(errormessage);
+        sugarService.hideLoader();
+      });
 });

@@ -27,7 +27,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   "get_menu_url" : "getmenu.php",
   "get_list_url" : "getlist.php?m=",
   "get_detail_url" :"getdetails.php?m=",
-  "delete_record_url" : "deleterecord.php?m="
+  "delete_record_url" : "deleterecord.php?m=",
+  "get_form_url" : "getform.php?m="
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -100,6 +101,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
   })
 
+  .state('app.createrecord',{
+    url: "/createrecord/:moduleId",
+    views: {
+      'menuContent' :{
+        templateUrl : "templates/createrecord.html",
+        controller : 'CreateRecordCrtl'
+      }
+    }
+
+  })
+
   .state('app.getdetail', {
     url: "/getdetail/:moduleId/:recordId",
     views: {
@@ -123,7 +135,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     getList : getList,
     getDetail : getDetail,
     showModalPopupConfirm : showModalPopupConfirm,
-    deleteRecord : deleteRecord
+    deleteRecord : deleteRecord,
+    getForm : getForm
   });
 
   function showLoader(){
@@ -171,6 +184,19 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       return(request.then(handleSuccess, handleError));
   }
 
+
+   function getForm(moduleId){
+      var request = $http({
+        method : "POST",
+        url : appConfig.url+''+appConfig.get_form_url+''+moduleId,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        data :{
+          session_id : appConfig.session_id
+        },
+        transformRequest: serializeData
+      });
+      return(request.then(handleSuccess, handleError));
+  }
 
    function getDetail(moduleId, recordId){
       var request = $http({

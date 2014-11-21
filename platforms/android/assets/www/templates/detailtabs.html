@@ -1,6 +1,6 @@
 <ion-view title="Details" has-header="false">
 	<ion-tabs class="tabs-icon-top">
-	   <ion-tab title="Detail" icon="icon ion-clipboard" >
+	   <ion-tab title="Detail" icon="icon ion-home" href="#/app/getdetail/{{moduleId}}/{{recordId}}">
 	    <ion-content class="has-header">
 		  <ion-list>
 	     	<ion-item class="list" ng-repeat="dataDetail in dataDetails">
@@ -20,12 +20,9 @@
 		  </ion-list>
 		</ion-content>
 	  </ion-tab>
-	  <ion-tab title="Update" icon="icon ion-edit">
-	  	<ion-content>
-	  	sa;flsd
-	  	</ion-content>
+	  <ion-tab title="Update" icon="icon ion-edit" href="#/app/getlists/{{moduleId}}">
 	  </ion-tab>
-	  <ion-tab title="Delete" icon="icon ion-trash-a" ng-click="deleterecord(moduleId, recordId)"></ion-tab>
+	  <ion-tab title="Delete" icon="icon ion-trash-a" ng-click="deleterecord()"></ion-tab>
 	</ion-tabs>		
 </ion-view>
 

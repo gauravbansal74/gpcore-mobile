@@ -1,0 +1,75 @@
+<ion-view title="Create New" has-header="false">
+   <ion-content class="has-header">
+		<ion-list>
+	     	<ion-item class="list" ng-repeat="dataDetail in dataDetails">
+				  <div class="item item-divider">
+				  		{{dataDetail.panel_name}}
+				  </div>
+				  <div ng-repeat="rows in dataDetail.rows">
+				  	 <label class="item item-input item-stacked-label" ng-repeat="row in rows">
+					      <span class="input-label">{{row.label}}</span>
+						 <span ng-switch on="row.type">
+
+						 		<!-- For Type name -->
+					   			<span ng-switch-when="name">
+					   				<span ng-if="row.required == 1">
+					   					<input type="text" placeholder="{{row.label}}" name="{{row.name}}" required />
+					   				</span>
+					   				<span ng-if="row.required != 1">
+					   					<input type="text" placeholder="{{row.label}}" name="{{row.name}}" />
+					   				</span>
+					   			</span>
+
+					   			<!-- For Type Phone -->
+					   			<span ng-switch-when="phone">
+					   				<span ng-if="row.required == 1">
+					   					<input type="tel" placeholder="{{row.label}}" name="{{row.name}}" required />
+					   				</span>
+					   				<span ng-if="row.required != 1">
+					   					<input type="tel" placeholder="{{row.label}}" name="{{row.name}}" />
+					   				</span>
+					   			</span>
+					  			
+					  			<!-- For Type url -->
+					   			<span ng-switch-when="url">
+					   				<span ng-if="row.required == 1">
+					   					<input type="text" placeholder="{{row.label}}" name="{{row.name}}" required />
+					   				</span>
+					   				<span ng-if="row.required != 1">
+					   					<input type="text" placeholder="{{row.label}}" name="{{row.name}}" />
+					   				</span>
+					   			</span>
+
+					   			<!-- For Type varchar -->
+					   			<span ng-switch-when="varchar">
+					   				<span ng-if="row.required == 1">
+					   					<textarea placeholder="{{row.label}}" name="{{row.name}}" maxlength="{{row.len}}" rows="2" cols="30" required></textarea>
+					   				</span>
+					   				<span ng-if="row.required != 1">
+					   					<textarea placeholder="{{row.label}}" name="{{row.name}}" maxlength="{{row.len}}" rows="2" cols="30"></textarea>
+					   				</span>
+					   			</span>
+
+					   			<!-- For Type text -->
+					   			<span ng-switch-when="text">
+					   				<span ng-if="row.required == 1">
+					   					<textarea placeholder="{{row.label}}" name="{{row.name}}" maxlength="{{row.len}}" rows="6" cols="80" required></textarea>
+					   				</span>
+					   				<span ng-if="row.required != 1">
+					   					<textarea placeholder="{{row.label}}" name="{{row.name}}" maxlength="{{row.len}}" rows="6" cols="80"></textarea>
+					   				</span>
+					   			</span>
+
+					   			<span ng-switch-default>
+					   				{{row.type}}
+					   			</span>
+					   	 </span>
+						 
+					</label>
+				  </div>
+			</ion-item>
+		  </ion-list>
+	</ion-content>
+</ion-view>
+
+

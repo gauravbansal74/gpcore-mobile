@@ -26,16 +26,29 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   "login_url" : "login.php",
   "get_menu_url" : "getmenu.php",
   "get_list_url" : "getlist.php?m=",
-  "get_detail_url" :"getdetails.php?m="
+  "get_detail_url" :"getdetails.php?m=",
+  "delete_record_url" : "deleterecord.php?m=",
+  "get_form_url" : "getform.php?m="
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
+ 
   .state('app', {
     url: "/app",
     abstract: true,
     templateUrl: "templates/menu.html",
     controller: 'AppCtrl'
+  })
+
+  .state('app.detailtabs',{
+    url: "/detailtabs/:moduleId/:recordId",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/detailtabs.html",
+        controller: 'DetailTabsCtrl'
+      }
+    }
   })
 
   .state('app.search', {
@@ -77,8 +90,30 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   })
   
 
+  .state('app.deleterecord',{
+    url: "/deleterecord",
+    views: {
+      'menuContent' :{
+        templateUrl : "templates/deleterecord.html",
+        controller : 'DeleteRecordCrtl'
+      }
+    }
+
+  })
+
+  .state('app.createrecord',{
+    url: "/createrecord/:moduleId",
+    views: {
+      'menuContent' :{
+        templateUrl : "templates/createrecord.html",
+        controller : 'CreateRecordCrtl'
+      }
+    }
+
+  })
+
   .state('app.getdetail', {
-    url: "/getdetail/:moduleId/:getdetailId",
+    url: "/getdetail/:moduleId/:recordId",
     views: {
       'menuContent' :{
         templateUrl: "templates/getdetail.html",
@@ -98,7 +133,10 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     showModalPopup : showModalPopup,
     getMenu : getMenu,
     getList : getList,
-    getDetail : getDetail
+    getDetail : getDetail,
+    showModalPopupConfirm : showModalPopupConfirm,
+    deleteRecord : deleteRecord,
+    getForm : getForm
   });
 
   function showLoader(){
@@ -114,16 +152,51 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   }
 
   function showModalPopup(title, description){
-      $ionicPopup.alert({
+      var response  = $ionicPopup.alert({
          title: title,
          template: description
        });
-       alertPopup.then(function(res) {
-         console.log('Thank you for not eating my delicious ice cream cone');
-       });
+      return response;
       
   }
 
+
+  function showModalPopupConfirm(title, description){
+    var response = $ionicPopup.confirm({
+       title: 'Consume Ice Cream',
+       template: 'Are you sure you want to eat this ice cream?'
+     });
+    return response;
+  }
+
+
+  function deleteRecord(moduleId, recordId){
+      var request = $http({
+        method : "POST",
+        url : appConfig.url+''+appConfig.delete_record_url+''+moduleId,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        data :{
+          session_id : appConfig.session_id,
+          id : recordId
+        },
+        transformRequest: serializeData
+      });
+      return(request.then(handleSuccess, handleError));
+  }
+
+
+   function getForm(moduleId){
+      var request = $http({
+        method : "POST",
+        url : appConfig.url+''+appConfig.get_form_url+''+moduleId,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        data :{
+          session_id : appConfig.session_id
+        },
+        transformRequest: serializeData
+      });
+      return(request.then(handleSuccess, handleError));
+  }
 
    function getDetail(moduleId, recordId){
       var request = $http({
