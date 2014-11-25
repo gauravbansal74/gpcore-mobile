@@ -13,57 +13,57 @@
 						 		<!-- For Type name -->
 					   			<span ng-switch-when="name">
 					   				<span ng-if="row.required == 1">
-					   					<input ng-model="scope[row.name]" type="text" placeholder="{{row.comments}}" name="{{row.name}}" required />
+					   					<input ng-model="{{row.name}}" type="text" placeholder="{{row.comments}}" name="{{row.name}}" required />
 					   				</span>
 					   				<span ng-if="row.required != 1">
-					   					<input ng-model="scope[row.name]" type="text" placeholder="{{row.comments}}" name="{{row.name}}" />
+					   					<input ng-model="{{row.name}}" type="text" placeholder="{{row.comments}}" name="{{row.name}}" />
 					   				</span>
 					   			</span>
 
 					   			<!-- For Type Phone -->
 					   			<span ng-switch-when="phone">
 					   				<span ng-if="row.required == 1">
-					   					<input ng-model="scope[row.name]" type="tel" placeholder="{{row.comments}}" name="{{row.name}}" required />
+					   					<input ng-model="{{row.name}}" type="tel" placeholder="{{row.comments}}" name="{{row.name}}" required />
 					   				</span>
 					   				<span ng-if="row.required != 1">
-					   					<input ng-model="scope[row.name]" type="tel" placeholder="{{row.comments}}" name="{{row.name}}" />
+					   					<input ng-model="{{row.name}}" type="tel" placeholder="{{row.comments}}" name="{{row.name}}" />
 					   				</span>
 					   			</span>
 					  			
 					  			<!-- For Type url -->
 					   			<span ng-switch-when="url">
 					   				<span ng-if="row.required == 1">
-					   					<input ng-model="scope[row.name]" type="text" placeholder="{{row.comments}}" name="{{row.name}}" required />
+					   					<input ng-model="{{row.name}}" type="text" placeholder="{{row.comments}}" name="{{row.name}}" required />
 					   				</span>
 					   				<span ng-if="row.required != 1">
-					   					<input ng-model="scope[row.name]" type="text" placeholder="{{row.comments}}" name="{{row.name}}" />
+					   					<input ng-model="{{row.name}}" type="text" placeholder="{{row.comments}}" name="{{row.name}}" />
 					   				</span>
 					   			</span>
 
 					   			<!-- For Type varchar -->
 					   			<span ng-switch-when="varchar">
 					   				<span ng-if="row.required == 1">
-					   					<textarea ng-model="scope[row.name]" placeholder="{{row.comments}}" name="{{row.name}}" maxlength="{{row.len}}" rows="2" cols="30" required></textarea>
+					   					<textarea ng-model="{{row.name}}" placeholder="{{row.comments}}" name="{{row.name}}" maxlength="{{row.len}}" rows="2" cols="30" required></textarea>
 					   				</span>
 					   				<span ng-if="row.required != 1">
-					   					<textarea ng-model="scope[row.name]" placeholder="{{row.comments}}" name="{{row.name}}" maxlength="{{row.len}}" rows="2" cols="30"></textarea>
+					   					<textarea ng-model="{{row.name}}" placeholder="{{row.comments}}" name="{{row.name}}" maxlength="{{row.len}}" rows="2" cols="30"></textarea>
 					   				</span>
 					   			</span>
 
 					   			<!-- For Type text -->
 					   			<span ng-switch-when="text">
 					   				<span ng-if="row.required == 1">
-					   					<textarea ng-model="scope[row.name]" placeholder="{{row.comments}}" name="{{row.name}}" maxlength="{{row.len}}" rows="6" cols="80" required></textarea>
+					   					<textarea ng-model="{{row.name}}" placeholder="{{row.comments}}" name="{{row.name}}" maxlength="{{row.len}}" rows="6" cols="80" required></textarea>
 					   				</span>
 					   				<span ng-if="row.required != 1">
-					   					<textarea ng-model="scope[row.name]" placeholder="{{row.comments}}" name="{{row.name}}" maxlength="{{row.len}}" rows="6" cols="80"></textarea>
+					   					<textarea ng-model="{{row.name}}" placeholder="{{row.comments}}" name="{{row.name}}" maxlength="{{row.len}}" rows="6" cols="80"></textarea>
 					   				</span>
 					   			</span>
 
 					   			<!-- For Type enum -->
 					   			<span ng-switch-when="enum" class="item-select">
 					   				<span ng-if="row.required == 1">
-					   					<select ng-model="scope[row.name]" name="{{row.name}}">
+					   					<select ng-model="{{row.name}}" name="{{row.name}}">
 					   						<option ng-repeat="option in row.options" ng-if="row.default_value == option.value" value="{{option.value}}" selected>
 					   							{{option.name}}
 					   						</option>
@@ -73,7 +73,7 @@
 					   					</select>
 					   				</span>
 					   				<span ng-if="row.required != 1">
-					   					<select ng-model="scope[row.name]" name="{{row.name}}">
+					   					<select ng-model="{{row.name}}" name="{{row.name}}">
 					   						<option ng-repeat="option in row.options" ng-if="row.default_value == option.value" value="{{option.value}}" selected>
 					   							{{option.name}}
 					   						</option>
@@ -88,20 +88,20 @@
 					   			<!-- For Type datetimecombo -->
 					   			<span ng-switch-when="date">
 					   				<span ng-if="row.required == 1">
-					   					<input ng-model="scope[row.name]" type="date" placeholder="{{row.comments}}" name="{{row.name}}" required />
+					   					<input ng-model="{{row.name}}" type="date" placeholder="{{row.comments}}" name="{{row.name}}" required />
 					   				</span>
 					   				<span ng-if="row.required != 1">
-					   					<input ng-model="scope[row.name]" type="date" placeholder="{{row.comments}}" name="{{row.name}}" />
+					   					<input ng-model="{{row.name}}" type="date" placeholder="{{row.comments}}" name="{{row.name}}" />
 					   				</span>
 					   			</span>
 
 					   			<!-- For Type datetimecombo -->
 					   			<span ng-switch-when="datetimecombo">
 					   				<span ng-if="row.required == 1">
-					   					<input ng-model="scope[row.name]" type="date" placeholder="{{row.comments}}" name="{{row.name}}" required />
+					   					<input ng-model="{{row.name}}" type="date" placeholder="{{row.comments}}" name="{{row.name}}" required />
 					   				</span>
 					   				<span ng-if="row.required != 1">
-					   					<input ng-model="scope[row.name]" type="date" placeholder="{{row.comments}}" name="{{row.name}}" />
+					   					<input ng-model="{{row.name}}" type="date" placeholder="{{row.comments}}" name="{{row.name}}" />
 					   				</span>
 					   			</span>
 

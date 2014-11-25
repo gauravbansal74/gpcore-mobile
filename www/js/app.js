@@ -148,7 +148,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     showModalPopupConfirm : showModalPopupConfirm,
     deleteRecord : deleteRecord,
     getForm : getForm,
-    saveRecord : saveRecord
+    saveRecord : saveRecord,
+    updateRecord : updateRecord
   });
 
   function showLoader(){
@@ -175,20 +176,33 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
   function showModalPopupConfirm(title, description){
     var response = $ionicPopup.confirm({
-       title: 'Consume Ice Cream',
-       template: 'Are you sure you want to eat this ice cream?'
+       title: title,
+       template: description
      });
     return response;
   }
 
 
-  function saveRecord(moduleId, a){
- //  console.log("Formdata test",mydata);
+function updateRecord(moduleId,recordId, a){
+  a['id'] = recordId;
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.save_record_url+''+moduleId,
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-        //dataType : 'json',
+        data : { 
+          'checkdata' : a,
+          'session_id' : appConfig.session_id
+        },
+       transformRequest: serializeData
+      });
+      return(request.then(handleSuccess, handleError));
+  }
+
+  function saveRecord(moduleId, a){
+      var request = $http({
+        method : "POST",
+        url : appConfig.url+''+appConfig.save_record_url+''+moduleId,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
         data : { 
           'checkdata' : a,
           'session_id' : appConfig.session_id
