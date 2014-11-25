@@ -28,7 +28,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   "get_list_url" : "getlist.php?m=",
   "get_detail_url" :"getdetails.php?m=",
   "delete_record_url" : "deleterecord.php?m=",
-  "get_form_url" : "getform.php?m="
+  "get_form_url" : "getform.php?m=",
+  "save_record_url" :"saverecord.php?m="
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -120,6 +121,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         controller: 'GetDetailCtrl'
       }
     }
+  })
+
+  .state('app.saverecord',{
+    url: "/saverecord",
+    views :{
+      'menuContent':{
+        templateUrl : "templates/saverecord.html",
+        controller : 'saveRecordCrtl'
+      }
+    }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
@@ -136,7 +147,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     getDetail : getDetail,
     showModalPopupConfirm : showModalPopupConfirm,
     deleteRecord : deleteRecord,
-    getForm : getForm
+    getForm : getForm,
+    saveRecord : saveRecord
   });
 
   function showLoader(){
@@ -169,6 +181,22 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     return response;
   }
 
+
+  function saveRecord(moduleId, a){
+ //  console.log("Formdata test",mydata);
+      var request = $http({
+        method : "POST",
+        url : appConfig.url+''+appConfig.save_record_url+''+moduleId,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        //dataType : 'json',
+        data : { 
+          'checkdata' : a,
+          'session_id' : appConfig.session_id
+        },
+       transformRequest: serializeData
+      });
+      return(request.then(handleSuccess, handleError));
+  }
 
   function deleteRecord(moduleId, recordId){
       var request = $http({
@@ -279,9 +307,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         continue;
       }
       var value = data[name];
-      buffer.push(
-        encodeURIComponent(name) + "=" + encodeURIComponent((value == null) ? "" : value)
-        );
+      if(angular.isObject(value)){
+        angular.forEach(value, function(data, key) {
+            buffer.push(
+          encodeURIComponent("checkdata["+key+"]") + "=" + encodeURIComponent((data == null) ? "" : data)
+          );
+        });
+      }else{
+        buffer.push(
+          encodeURIComponent(name) + "=" + encodeURIComponent((value == null) ? "" : value)
+          );
+      }
     }
 
     var source = buffer

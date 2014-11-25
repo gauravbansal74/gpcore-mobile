@@ -112,4 +112,25 @@ angular.module('starter.controllers', [])
         console.log(errormessage);
         sugarService.hideLoader();
       });
+
+  $scope.scope = {}
+   
+    $scope.submit = function(){
+      var a = {};
+      a = $scope.scope;
+      console.log(a);
+      sugarService.saveRecord($stateParams.moduleId, a)
+        .then(function(successmessage){
+            console.log(successmessage);
+        }, function(errormessage){
+          console.log(errormessage);
+        });
+    }
+})
+
+
+
+.controller('saveRecordCrtl',function($scope){
+
+
 });
