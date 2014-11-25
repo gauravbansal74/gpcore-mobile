@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ngCookies'])
 
 .controller('AppCtrl', function($scope, appConfig, sugarService) {
   sugarService.getMenu()
@@ -14,7 +14,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('LoginCtrl',function($scope, $state, appConfig, sugarService){
+.controller('LoginCtrl',function($scope, $state, $cookieStore, appConfig, sugarService){
 
     $scope.username = "";
     $scope.password = "";
@@ -24,6 +24,7 @@ angular.module('starter.controllers', [])
       sugarService.loginUser(username, password)
         .then(function(successmessage){
           appConfig.session_id = successmessage.session_id;
+          $cookieStore.put('session_id',successmessage.session_id);
           $state.transitionTo('app.getlists', {}, {reload: true, inherit: false, notify: true });
            sugarService.hideLoader();
         }, function(errormessage){

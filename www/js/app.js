@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers','ngCookies'])
 
 .run(function($ionicPlatform, $ionicLoading) {
   $ionicPlatform.ready(function() {
@@ -135,8 +135,9 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
 })
-.service('sugarService',function($http, $q, appConfig, $ionicLoading, $ionicPopup){
+.service('sugarService',function($http, $q, appConfig, $cookieStore, $ionicLoading, $ionicPopup){
 
+  
   return({
     loginUser : loginUser,
     showLoader : showLoader,
@@ -184,6 +185,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
 
 function updateRecord(moduleId,recordId, a){
+  var session_id = $cookieStore.get('session_id');
   a['id'] = recordId;
       var request = $http({
         method : "POST",
@@ -191,7 +193,7 @@ function updateRecord(moduleId,recordId, a){
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
         data : { 
           'checkdata' : a,
-          'session_id' : appConfig.session_id
+          'session_id' : session_id
         },
        transformRequest: serializeData
       });
@@ -199,13 +201,14 @@ function updateRecord(moduleId,recordId, a){
   }
 
   function saveRecord(moduleId, a){
+    var session_id = $cookieStore.get('session_id');
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.save_record_url+''+moduleId,
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
         data : { 
           'checkdata' : a,
-          'session_id' : appConfig.session_id
+          'session_id' : session_id
         },
        transformRequest: serializeData
       });
@@ -213,12 +216,13 @@ function updateRecord(moduleId,recordId, a){
   }
 
   function deleteRecord(moduleId, recordId){
+    var session_id = $cookieStore.get('session_id');
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.delete_record_url+''+moduleId,
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
         data :{
-          session_id : appConfig.session_id,
+          session_id : session_id,
           id : recordId
         },
         transformRequest: serializeData
@@ -228,12 +232,13 @@ function updateRecord(moduleId,recordId, a){
 
 
    function getForm(moduleId){
+    var session_id = $cookieStore.get('session_id');
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.get_form_url+''+moduleId,
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
         data :{
-          session_id : appConfig.session_id
+          session_id : session_id
         },
         transformRequest: serializeData
       });
@@ -241,12 +246,13 @@ function updateRecord(moduleId,recordId, a){
   }
 
    function getDetail(moduleId, recordId){
+    var session_id = $cookieStore.get('session_id');
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.get_detail_url+''+moduleId,
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
         data :{
-          session_id : appConfig.session_id,
+          session_id : session_id,
           id : recordId
         },
         transformRequest: serializeData
@@ -255,12 +261,13 @@ function updateRecord(moduleId,recordId, a){
   }
 
   function getList(moduleId){
+    var session_id = $cookieStore.get('session_id');
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.get_list_url+''+moduleId,
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
         data :{
-          session_id : appConfig.session_id
+          session_id : session_id
         },
         transformRequest: serializeData
       });
@@ -270,12 +277,13 @@ function updateRecord(moduleId,recordId, a){
 
 
   function getMenu(){
+    var session_id = $cookieStore.get('session_id');
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.get_menu_url,
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
         data :{
-          session_id : appConfig.session_id
+          session_id : session_id
         },
         transformRequest: serializeData
       });

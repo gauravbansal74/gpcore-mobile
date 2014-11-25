@@ -7,7 +7,7 @@
 				  </div>
 				  <div ng-repeat="rows in dataDetail.rows">
 				  	 <label class="item item-input item-stacked-label" ng-repeat="row in rows">
-					      <span class="input-label">{{row.label}}</span>
+					     <span class="input-label">{{row.label}}</span>
 						 <span ng-switch on="row.type">
 
 						 		<!-- For Type name -->
@@ -104,6 +104,7 @@
 					   					<input ng-model="scope[row.name]" type="date" placeholder="{{row.comments}}" name="{{row.name}}" />
 					   				</span>
 					   			</span>
+
 
 					   			<span ng-switch-default>
 					   				{{row.type}}
