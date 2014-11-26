@@ -10,5 +10,13 @@
 /var/www/html/gpcore-mobile/platforms/android/ant-build/classes/com/ionicframework/myapp557184/R$xml.class \
 /var/www/html/gpcore-mobile/platforms/android/ant-build/classes/com/ionicframework/myapp557184/R.class \
 /var/www/html/gpcore-mobile/platforms/android/ant-build/classes/com/ionicframework/myapp557184/R$drawable.class \
+/var/www/html/gpcore-mobile/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$DBRunner.class \
+/var/www/html/gpcore-mobile/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$QueryType.class \
+/var/www/html/gpcore-mobile/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$Action.class \
+/var/www/html/gpcore-mobile/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$DBQuery.class \
+/var/www/html/gpcore-mobile/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin.class \
+/var/www/html/gpcore-mobile/platforms/android/ant-build/classes/org/pgsqlite/SQLitePlugin$1.class \
+/var/www/html/gpcore-mobile/platforms/android/ant-build/classes/org/apache/cordova/networkinformation/NetworkManager$1.class \
+/var/www/html/gpcore-mobile/platforms/android/ant-build/classes/org/apache/cordova/networkinformation/NetworkManager.class \
 /var/www/html/gpcore-mobile/platforms/android/ant-build/classes/org/apache/cordova/device/Device.class \
 /var/www/html/gpcore-mobile/platforms/android/ant-build/dexedLibs/classes-57b23cf249375a57751d0bf54ffe0db2.jar \

@@ -4,9 +4,11 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ngCookies'])
 
-.run(function($ionicPlatform, $ionicLoading) {
+var db = null;
+angular.module('starter', ['ionic', 'starter.controllers','ngCookies','ngCordova'])
+
+.run(function($ionicPlatform, $ionicLoading, $cordovaSQLite, $cordovaNetwork) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -17,6 +19,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCookies'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    db = $cordovaSQLite.openDB({ name: "glueown.db" });
+    $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS glueplusdata (modulename text, documentid text, postdata1 text)');
   });
 })
 .constant("appConfig", {
@@ -135,7 +140,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCookies'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
 })
-.service('sugarService',function($http, $q, appConfig, $cookieStore, $ionicLoading, $ionicPopup){
+.service('sugarService',function($http, $q, appConfig, $cookieStore, $ionicLoading, $ionicPopup, $cordovaNetwork, $cordovaSQLite){
 
   
   return({
@@ -150,8 +155,28 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCookies'])
     deleteRecord : deleteRecord,
     getForm : getForm,
     saveRecord : saveRecord,
-    updateRecord : updateRecord
+    updateRecord : updateRecord,
+    isOffline : isOffline,
+    isOnline : isOnline,
+    getNumber : getNumber
   });
+
+
+  function getNumber(){
+     var query = "SELECT * FROM glueplusdata";
+     var myresponse = $cordovaSQLite.execute(db, query, []);
+     return(myresponse.then(handleDbSuccess, handleDbSuccess));
+  }
+
+  function isOffline(){
+    var isOffline = $cordovaNetwork.isOffline();
+    return isOffline;
+  }
+
+  function isOnline(){
+    var isOnline = $cordovaNetwork.isOnline();
+    return isOnline;
+  }
 
   function showLoader(){
     $ionicLoading.show({
@@ -185,23 +210,33 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCookies'])
 
 
 function updateRecord(moduleId,recordId, a){
-  var session_id = $cookieStore.get('session_id');
-  a['id'] = recordId;
-      var request = $http({
-        method : "POST",
-        url : appConfig.url+''+appConfig.save_record_url+''+moduleId,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-        data : { 
-          'checkdata' : a,
-          'session_id' : session_id
-        },
-       transformRequest: serializeData
-      });
+
+  if(isOnline() != true){
+    var mobilenumber = "9573127285";
+    var query = "INSERT INTO glueplusdata (modulename, documentid, postdata1) VALUES (?,?,?)";
+    var request = $cordovaSQLite.execute(db, query, [moduleId, recordId, JSON.stringify(a)]);
+      return(request.then(handleDbSuccess, handleDbSuccess));
+  }else{
+      var session_id = appConfig.session_id;
+      var dbrecordId = 0;
+      a['id'] = recordId;
+      
+        var request = $http({
+                method : "POST",
+                url : appConfig.url+''+appConfig.save_record_url+''+moduleId,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                data : { 
+                  'checkdata' : a,
+                  'session_id' : session_id
+                },
+               transformRequest: serializeData
+              });
       return(request.then(handleSuccess, handleError));
+    }
   }
 
   function saveRecord(moduleId, a){
-    var session_id = $cookieStore.get('session_id');
+    var session_id = appConfig.session_id;
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.save_record_url+''+moduleId,
@@ -216,7 +251,7 @@ function updateRecord(moduleId,recordId, a){
   }
 
   function deleteRecord(moduleId, recordId){
-    var session_id = $cookieStore.get('session_id');
+    var session_id = appConfig.session_id;
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.delete_record_url+''+moduleId,
@@ -232,7 +267,7 @@ function updateRecord(moduleId,recordId, a){
 
 
    function getForm(moduleId){
-    var session_id = $cookieStore.get('session_id');
+    var session_id = appConfig.session_id;
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.get_form_url+''+moduleId,
@@ -246,7 +281,7 @@ function updateRecord(moduleId,recordId, a){
   }
 
    function getDetail(moduleId, recordId){
-    var session_id = $cookieStore.get('session_id');
+    var session_id = appConfig.session_id;
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.get_detail_url+''+moduleId,
@@ -261,7 +296,7 @@ function updateRecord(moduleId,recordId, a){
   }
 
   function getList(moduleId){
-    var session_id = $cookieStore.get('session_id');
+    var session_id = appConfig.session_id;
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.get_list_url+''+moduleId,
@@ -277,7 +312,7 @@ function updateRecord(moduleId,recordId, a){
 
 
   function getMenu(){
-    var session_id = $cookieStore.get('session_id');
+    var session_id = appConfig.session_id;
       var request = $http({
         method : "POST",
         url : appConfig.url+''+appConfig.get_menu_url,
@@ -316,6 +351,10 @@ function updateRecord(moduleId,recordId, a){
 
   function handleSuccess(response) {
     return(response.data);
+  }
+
+  function handleDbSuccess(response){
+    return(response);
   }
 
   function serializeData(data) {

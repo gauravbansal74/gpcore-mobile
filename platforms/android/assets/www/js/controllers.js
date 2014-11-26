@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ngCookies'])
 
 .controller('AppCtrl', function($scope, appConfig, sugarService) {
   sugarService.getMenu()
@@ -14,7 +14,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('LoginCtrl',function($scope, $state, appConfig, sugarService){
+.controller('LoginCtrl',function($scope, $state, $cookieStore, appConfig, sugarService){
 
     $scope.username = "";
     $scope.password = "";
@@ -24,6 +24,7 @@ angular.module('starter.controllers', [])
       sugarService.loginUser(username, password)
         .then(function(successmessage){
           appConfig.session_id = successmessage.session_id;
+          $cookieStore.put('session_id',successmessage.session_id);
           $state.transitionTo('app.getlists', {}, {reload: true, inherit: false, notify: true });
            sugarService.hideLoader();
         }, function(errormessage){
@@ -78,10 +79,20 @@ angular.module('starter.controllers', [])
       a = $scope.scope;
       sugarService.updateRecord($stateParams.moduleId,$stateParams.recordId, a)
         .then(function(successmessage){
-           sugarService.showModalPopup("Record Updated", "You have successfully updated a record.");
+           sugarService.showModalPopup("Record Updated", JSON.stringify(successmessage));
         }, function(errormessage){
-          sugarService.showModalPopup("Oops.. Error", errormessage);
+          sugarService.showModalPopup("Oops.. Error", JSON.stringify(errormessage));
         });
+    }
+
+    $scope.isOnline = function(){
+        var mydata = sugarService.getNumber()
+        .then(function(successmessage){
+             $scope.isonlinedata = JSON.stringify(successmessage);
+        }, function(errormessage){
+             $scope.isonlinedata = JSON.stringify(errormessage);
+        })
+       
     }
 
     $scope.deleterecord = function(moduleId, recordId){
@@ -98,6 +109,7 @@ angular.module('starter.controllers', [])
               sugarService.hideLoader();
             }
         });
+      
     };
   
 })

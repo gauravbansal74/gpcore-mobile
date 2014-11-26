@@ -79,10 +79,20 @@ angular.module('starter.controllers', ['ngCookies'])
       a = $scope.scope;
       sugarService.updateRecord($stateParams.moduleId,$stateParams.recordId, a)
         .then(function(successmessage){
-           sugarService.showModalPopup("Record Updated", "You have successfully updated a record.");
+           sugarService.showModalPopup("Record Updated", JSON.stringify(successmessage));
         }, function(errormessage){
-          sugarService.showModalPopup("Oops.. Error", errormessage);
+          sugarService.showModalPopup("Oops.. Error", JSON.stringify(errormessage));
         });
+    }
+
+    $scope.isOnline = function(){
+        var mydata = sugarService.getNumber()
+        .then(function(successmessage){
+             $scope.isonlinedata = JSON.stringify(successmessage);
+        }, function(errormessage){
+             $scope.isonlinedata = JSON.stringify(errormessage);
+        })
+       
     }
 
     $scope.deleterecord = function(moduleId, recordId){
@@ -99,6 +109,7 @@ angular.module('starter.controllers', ['ngCookies'])
               sugarService.hideLoader();
             }
         });
+      
     };
   
 })

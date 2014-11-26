@@ -135,12 +135,18 @@
 					</label>
 				  </div>
 		  </div>
-		  <input type="submit" id="submit" value="Submit" />
+		  <input class="button button-block button-positive" type="submit" id="submit" value="Update" />
 		 </form>
+
+		  <input class="button button-block button-positive" type="button"  value="is Online" ng-click="isOnline()" />	
+
+		  <input type="text" ng-model="isonlinedata" />
 	  	</ion-content>
 	  </ion-tab>
 	  <ion-tab title="Delete" icon="icon ion-trash-a" ng-click="deleterecord(moduleId, recordId)"></ion-tab>
-	</ion-tabs>		
+	</ion-tabs>	
+
+
 </ion-view>
 
 
