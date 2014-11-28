@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 
 var db = null;
-angular.module('starter', ['ionic', 'starter.controllers','ngCookies','ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
 
 .run(function($ionicPlatform, $ionicLoading, $cordovaSQLite, $cordovaNetwork) {
   $ionicPlatform.ready(function() {
@@ -20,8 +20,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCookies','ngCordova
       StatusBar.styleDefault();
     }
 
-    db = $cordovaSQLite.openDB({ name: "glueown.db" });
-    $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS glueplusdata (modulename text, documentid text, postdata1 text)');
+    db = $cordovaSQLite.openDB({ name: "gluemobi.db" });
+    $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS gluemenu (modulename text, moduleid text)');
+    $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS glueform (modulename text, moduledata text)');
+   // $cordovaSQLite.execute(db, 'DELETE FROM glueplusform1');
+   // $cordovaSQLite.execute(db, 'DELETE FROM glueplusdata');
   });
 })
 .constant("appConfig", {
@@ -128,6 +131,16 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCookies','ngCordova
     }
   })
 
+  .state('app.getsync', {
+    url: "/getsync",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/getsync.html",
+        controller: 'GetSyncCtrl'
+      }
+    }
+  })
+
   .state('app.saverecord',{
     url: "/saverecord",
     views :{
@@ -140,7 +153,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCookies','ngCordova
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
 })
-.service('sugarService',function($http, $q, appConfig, $cookieStore, $ionicLoading, $ionicPopup, $cordovaNetwork, $cordovaSQLite){
+.service('sugarService',function($http, $q, appConfig, $ionicLoading, $ionicPopup, $cordovaNetwork, $cordovaSQLite){
 
   
   return({
@@ -158,12 +171,32 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCookies','ngCordova
     updateRecord : updateRecord,
     isOffline : isOffline,
     isOnline : isOnline,
-    getNumber : getNumber
+    getNumber : getNumber,
+    saveMenu : saveMenu,
+    getOfflineMenu : getOfflineMenu,
+    saveForm: saveForm
   });
 
+  function saveMenu(modulename, moduleid){
+        var query = "INSERT INTO gluemenu (modulename, moduleid) VALUES (?,?)";
+        var request = $cordovaSQLite.execute(db, query, [modulename,JSON.stringify(moduleid)]);
+        return(request.then(handleDbSuccess, handleDbSuccess));
+  }
+
+  function saveForm(modulename, moduledata){
+        var query = "INSERT INTO glueform (modulename, moduledata) VALUES (?,?)";
+        var request = $cordovaSQLite.execute(db, query, [modulename,JSON.stringify(moduledata)]);
+        return(request.then(handleDbSuccess, handleDbSuccess));
+  }
+
+  function getOfflineMenu(){
+    var query = "SELECT modulename, moduleid from gluemenu";
+    var myresponse = $cordovaSQLite.execute(db, query, []);
+    return(myresponse.then(handleDbSuccess, handleDbSuccess));
+  }
 
   function getNumber(){
-     var query = "SELECT * FROM glueplusdata";
+     var query = "SELECT COUNT(*) FROM gluemenu";
      var myresponse = $cordovaSQLite.execute(db, query, []);
      return(myresponse.then(handleDbSuccess, handleDbSuccess));
   }
@@ -207,6 +240,51 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCookies','ngCordova
      });
     return response;
   }
+
+  function handleselect(res){
+     var caseTableResult = [];
+      if(res.rows.length > 0) {
+        caseTableResult = res.rows;
+        return caseTableResult.item(0);
+      }
+               
+  }
+
+  function handleselecterror(res){
+    return res;
+  }
+
+  function getForm(moduleId){
+
+    if(isOnline() != true){
+        var query = "SELECT moduledata from glueform WHERE modulename='"+moduleId+"'";
+        var myresponse = $cordovaSQLite.execute(db, query, []);
+        return(myresponse.then(handleDbSuccess, handleDbSuccess));
+    }else{
+      var session_id = appConfig.session_id;
+      var request = $http({
+        method : "POST",
+        url : appConfig.url+''+appConfig.get_form_url+''+moduleId,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        data :{
+          session_id : session_id
+        },
+        transformRequest: serializeData
+      });
+      return(request.then(handleSuccess, handleError));
+    }
+    
+  }
+
+
+  function saveModuleForm(moduleId, a){
+    
+        var query = "INSERT INTO glueplusform1 (modulename, formjson) VALUES (?,?)";
+        var request = $cordovaSQLite.execute(db, query, [moduleId,"datatest"]);
+        return(request.then(handleDbSuccess, handleDbSuccess));
+     
+  }
+
 
 
 function updateRecord(moduleId,recordId, a){
@@ -266,20 +344,7 @@ function updateRecord(moduleId,recordId, a){
   }
 
 
-   function getForm(moduleId){
-    var session_id = appConfig.session_id;
-      var request = $http({
-        method : "POST",
-        url : appConfig.url+''+appConfig.get_form_url+''+moduleId,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-        data :{
-          session_id : session_id
-        },
-        transformRequest: serializeData
-      });
-      return(request.then(handleSuccess, handleError));
-  }
-
+   
    function getDetail(moduleId, recordId){
     var session_id = appConfig.session_id;
       var request = $http({

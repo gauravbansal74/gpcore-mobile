@@ -14,7 +14,7 @@ angular.module('starter.controllers', ['ngCookies'])
 
 })
 
-.controller('LoginCtrl',function($scope, $state, $cookieStore, appConfig, sugarService){
+.controller('LoginCtrl',function($scope, $state, appConfig, sugarService){
 
     $scope.username = "";
     $scope.password = "";
@@ -24,7 +24,6 @@ angular.module('starter.controllers', ['ngCookies'])
       sugarService.loginUser(username, password)
         .then(function(successmessage){
           appConfig.session_id = successmessage.session_id;
-          $cookieStore.put('session_id',successmessage.session_id);
           $state.transitionTo('app.getlists', {}, {reload: true, inherit: false, notify: true });
            sugarService.hideLoader();
         }, function(errormessage){
@@ -47,10 +46,10 @@ angular.module('starter.controllers', ['ngCookies'])
 })
 
 .controller('GetDetailCtrl', function($scope, $state, $stateParams, appConfig, sugarService) {
-  sugarService.showLoader();
-  $scope.moduleId = $stateParams.moduleId;
-  $scope.recordId = $stateParams.recordId;
-  $scope.scope = {};
+      sugarService.showLoader();
+      $scope.moduleId = $stateParams.moduleId;
+      $scope.recordId = $stateParams.recordId;
+      $scope.scope = {};
 
     sugarService.getForm($stateParams.moduleId)
       .then(function(successmessage){
@@ -130,13 +129,23 @@ angular.module('starter.controllers', ['ngCookies'])
 
 .controller('CreateRecordCrtl', function($scope, $stateParams, appConfig, sugarService){
     sugarService.showLoader();
+    var moduleId = $stateParams.moduleId;
     sugarService.getForm($stateParams.moduleId)
       .then(function(successmessage){
-        $scope.dataDetails = successmessage;
-        sugarService.hideLoader();
+        //$scope.dataDetails = successmessage;
+        if(successmessage.hasOwnProperty("rows") == true){
+              caseTableResult = successmessage.rows;
+              var mydata = JSON.parse(caseTableResult.item(0).moduledata);
+              $scope.dataDetails = mydata;
+              sugarService.hideLoader();
+         }else{
+             $scope.dataDetails = successmessage;
+             sugarService.hideLoader();
+         }
+       // sugarService.showModalPopup("Success",JSON.stringify(successmessage));
       }, function(errormessage){
-        console.log(errormessage);
-        sugarService.hideLoader();
+       // sugarService.showModalPopup("Error",JSON.stringify(errormessage));
+       sugarService.hideLoader();
       });
 
   $scope.scope = {};
@@ -153,9 +162,64 @@ angular.module('starter.controllers', ['ngCookies'])
     }
 })
 
+.controller('saveRecordCrtl',function($scope){})
+
+.controller('GetSyncCtrl',function($scope, sugarService){
+
+    $scope.getmenu = function(){
+      sugarService.getMenu()
+        .then(function(successmessage){
+            console.log(successmessage);
+             
+
+            sugarService.saveMenu("menu", successmessage)
+                .then(function(successdata){
+                    sugarService.showModalPopup("Success", JSON.stringify(successdata));
+                }, function(errordata){
+                    sugarService.showModalPopup("Oops.. Error", JSON.stringify(errordata));
+                });
+            
+        }, function(errormessage){
+            console.log(errormessage);
+        });
+    };
 
 
-.controller('saveRecordCrtl',function($scope){
+    $scope.getform = function(){
+      sugarService.showLoader();
+      sugarService.getOfflineMenu()
+        .then(function(successmessage){
+           if(successmessage.rows.length > 0) {
+              caseTableResult = successmessage.rows;
+              var mydata = JSON.parse(caseTableResult.item(0).moduleid);
+              angular.forEach(mydata, function(value, key) {
+                if(value.title == "mobile"){
+                  angular.forEach(value.modules, function(data, index) {
+                      //sugarService.showModalPopup("success 1", index);
+                      sugarService.getForm(index)
+                        .then(function(successdata){
+                            sugarService.saveForm(index, successdata)
+                              .then(function(sdata){
+                              //  sugarService.showModalPopup("success 1", JSON.stringify(sdata));
+                              sugarService.hideLoader();
+                              }, function(edata){
+                              //  sugarService.showModalPopup("success 1", JSON.stringify(edata));
+                              sugarService.hideLoader();
+                              });
+                        }, function(errordata){
+                          sugarService.hideLoader();
+                        });
+                  });
+                }
+              });
+              
+           }
+        }, function(errormessage){
+             sugarService.showModalPopup("Oops.. Error", JSON.stringify(successmessage));
+             sugarService.hideLoader();
+        });
+      
+    };
 
 
 });
